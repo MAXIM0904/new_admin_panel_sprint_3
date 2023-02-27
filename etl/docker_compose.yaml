@@ -1,0 +1,26 @@
+version: '3.9'
+services:
+  copy_es:
+    build: ./postgres_to_es
+    image: copy_es
+    container_name: copy_es
+    env_file:
+      - postgres_to_es/.env
+    networks:
+      - copy_db
+    ports:
+      - "8000:8000"
+
+  elasticsearch:
+    container_name: es_container
+    image: docker.elastic.co/elasticsearch/elasticsearch:7.7.0
+    networks:
+      - copy_db
+    depends_on:
+      - copy_es
+    ports:
+      - "9200:9200"
+
+networks:
+  copy_db:
+    driver: bridge
