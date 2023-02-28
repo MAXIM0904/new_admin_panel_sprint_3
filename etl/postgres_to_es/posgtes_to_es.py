@@ -9,18 +9,12 @@ from dotenv import load_dotenv
 from psycopg2.extensions import connection as _connection
 from psycopg2.extras import DictCursor
 from etl.postgres_to_es.schema import SchemaInformFilms
-from etl.postgres_to_es.backoff import backoff, save_data
+from etl.postgres_to_es.backoff import backoff
 from contextlib import closing
 
 dotenv_path = os.path.join(os.path.dirname(__file__), '.env')
 if os.path.exists(dotenv_path):
     load_dotenv(dotenv_path)
-
-
-# def save_elastic(es, data):
-#     for i in data['mappings']:
-#         resp = es.index(index='movies', document=i)
-#         print(resp)
 
 
 def save_elastic(es, data):

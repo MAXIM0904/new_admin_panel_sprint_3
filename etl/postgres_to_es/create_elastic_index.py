@@ -119,8 +119,8 @@ mappings = {
 
 es = elasticsearch.Elasticsearch(os.environ.get('HOST_ES'))
 resp = es.info()
-# es.indices.delete(index='movies')
-# es.close()
+
+
 try:
     es.indices.create(index='movies', settings=settings, mappings=mappings)
     logging.info(True, 'Индекс успешно создан.')
