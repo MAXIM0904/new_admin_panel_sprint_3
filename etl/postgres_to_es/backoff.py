@@ -29,11 +29,26 @@ def backoff(start_sleep_time=0.1, factor=2, border_sleep_time=10):
                     return func(*args, **kwargs)
                 except psycopg2.OperationalError as err:
                     print_psycopg2_exception(err)
-                    print(f"Потеря соединения, повтор через {tm} сек.")
+                    logging.info(f"Потеря соединения, повтор через {tm} сек.")
                     if tm < border_sleep_time:
                         tm += (start_sleep_time * factor)
                     elif tm > border_sleep_time:
                         tm = border_sleep_time
                     time.sleep(tm)
+        return _inner
+    return func_wrapper
+
+
+def save_data():
+    def func_wrapper(func):
+        @wraps(func)
+        def _inner(date_update='1970-01-01', *args, **kwargs):
+            while True:
+                try:
+                    return func(date_update, *args, **kwargs)
+                    date_update = datetime.datetime.now()
+                    time.sleep(start_sleep_time)
+                except:
+                    time.sleep(start_sleep_time)
         return _inner
     return func_wrapper

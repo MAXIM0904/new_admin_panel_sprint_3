@@ -8,8 +8,18 @@ services:
       - postgres_to_es/.env
     networks:
       - copy_db
+
+  movies_database:
+    image: postgres:13
+    container_name: movies_database
+    networks:
+      - copy_db
+    depends_on:
+      - copy_es
+    env_file:
+      - .env
     ports:
-      - "8000:8000"
+      - "5432:5432"
 
   elasticsearch:
     container_name: es_container
@@ -17,7 +27,7 @@ services:
     networks:
       - copy_db
     depends_on:
-      - copy_es
+      - movies_database
     ports:
       - "9200:9200"
 

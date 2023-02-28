@@ -1,4 +1,14 @@
+import os
+
 import elasticsearch
+from dotenv import load_dotenv
+from postgres_to_es.backoff import logging
+
+dotenv_path = os.path.join(os.path.dirname(__file__), '.env')
+
+if os.path.exists(dotenv_path):
+    load_dotenv(dotenv_path)
+
 
 settings = {
     "refresh_interval": "1s",
@@ -107,13 +117,15 @@ mappings = {
     }
 }
 
-es = elasticsearch.Elasticsearch('http://127.0.0.1:9200')
+es = elasticsearch.Elasticsearch(os.environ.get('HOST_ES'))
 resp = es.info()
-
+# es.indices.delete(index='movies')
+# es.close()
 try:
     es.indices.create(index='movies', settings=settings, mappings=mappings)
-    print(True, 'Индекс успешно создан.')
+    logging.info(True, 'Индекс успешно создан.')
+    print('Индекс успешно создан.')
 except elasticsearch.RequestError as err:
-    print(err)
+    logging.info(err)
 finally:
     es.close()
