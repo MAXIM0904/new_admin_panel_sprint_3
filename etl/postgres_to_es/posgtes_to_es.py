@@ -49,6 +49,7 @@ def load_from_posgre(pg_conn: _connection, es: elasticsearch, package_limit: int
         LEFT JOIN content.genre_film_work gfw ON gfw.film_work_id = fw.id
         LEFT JOIN content.genre g ON g.id = gfw.genre_id GROUP BY fw.id
         HAVING fw.created > (%s) ORDER BY fw.modified;""", (date_update,))
+        print(date_update)
         key = [column[0] for column in cursor_pg.description]
         table_records_query = cursor_pg.fetchmany(package_limit)
         while len(table_records_query) != 0:
@@ -75,9 +76,8 @@ if __name__ == '__main__':
     date_update = '1970-01-01'
     while True:
         try:
-            connect_db(date_update='1970-01-01')
+            connect_db(date_update=date_update)
             date_update = datetime.datetime.now()
             time.sleep(60)
         except:
             time.sleep(60)
-
