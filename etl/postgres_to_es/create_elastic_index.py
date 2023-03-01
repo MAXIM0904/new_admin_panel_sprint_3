@@ -120,10 +120,10 @@ mappings = {
 es = elasticsearch.Elasticsearch(os.environ.get('HOST_ES'))
 resp = es.info()
 
+
 try:
     es.indices.create(index='movies', settings=settings, mappings=mappings)
     logging.info(True, 'Индекс успешно создан.')
-    print('Индекс успешно создан.')
 except elasticsearch.RequestError as err:
     logging.info(err)
 finally:

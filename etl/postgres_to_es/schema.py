@@ -1,6 +1,5 @@
 from typing import List
 from pydantic import BaseModel
-from typing import Union
 
 
 class InformationFilmCrew(BaseModel):
@@ -10,10 +9,10 @@ class InformationFilmCrew(BaseModel):
 
 class Films(BaseModel):
     id: str
-    imdb_rating: Union[float, None]
+    imdb_rating: float | None
     genre: list
     title: str
-    description: Union[str, None]
+    description: str | None
     director: str
     actors_names: str
     writers_names: str
